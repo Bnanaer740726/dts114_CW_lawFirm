@@ -1,6 +1,6 @@
 .env
 .env.*
-Task1/.env
+meta-system/.env
 __pycache__/
 *.pyc
 .venv/
