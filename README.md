@@ -34,7 +34,7 @@ git init
 git add .
 git commit -m "feat: law firm meta-software with CI/CD"
 git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/law-firm-cw.git
+git remote add origin https://github.com/Bnanaer740726/dts114_CW_lawFirm.git
 git push -u origin main
 ```
 
