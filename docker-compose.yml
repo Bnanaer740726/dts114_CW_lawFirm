@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  law-firm-app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: law-firm-app
+    ports:
+      - "5005:5005"
+    environment:
+      - FLASK_ENV=production
+      - FLASK_APP=main.py
+    restart: unless-stopped

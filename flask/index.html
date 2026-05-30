@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Feedback Collection System</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+  <style>
+    :root {
+      --bg: #0b1320;
+      --card: #111b2d;
+      --muted: #9fb0cc;
+      --border: rgba(255,255,255,.12);
+      --accent: #2f7dff;
+    }
+
+    body {
+      background: radial-gradient(1200px 600px at 30% 0%, rgba(47,125,255,.18), transparent 60%),
+                  radial-gradient(1000px 500px at 80% 10%, rgba(71,210,255,.12), transparent 55%),
+                  linear-gradient(180deg, #070c14 0%, #0a1220 55%, #060a12 100%);
+      color: #e9eefc;
+      min-height: 100vh;
+    }
+
+    .navbar-blur {
+      background: rgba(5,10,18,.6);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(17,27,45,.65) 0%, rgba(7,12,20,.9) 65%, rgba(6,10,18,1) 100%);
+    }
+
+    .hero-image {
+      width: 100%;
+      max-height: 360px;
+      object-fit: cover;
+      display: block;
+      filter: saturate(1.05) contrast(1.03);
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(6,10,18,.92) 0%, rgba(6,10,18,.55) 45%, rgba(6,10,18,.25) 100%),
+                  linear-gradient(180deg, rgba(6,10,18,.25) 0%, rgba(6,10,18,.75) 90%);
+    }
+
+    .hero-content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .35rem .65rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(17,27,45,.55);
+      color: #dfe8ff;
+      font-weight: 600;
+      font-size: .9rem;
+    }
+
+    .hero-title {
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      text-shadow: 0 10px 30px rgba(0,0,0,.45);
+    }
+
+    .hero-subtitle {
+      color: rgba(233,238,252,.85);
+      max-width: 56ch;
+    }
+
+    .glass-card {
+      background: rgba(17,27,45,.72);
+      border: 1px solid var(--border);
+      box-shadow: 0 18px 55px rgba(0,0,0,.45);
+      border-radius: 16px;
+    }
+
+    .section-title {
+      font-weight: 750;
+      letter-spacing: -0.01em;
+    }
+
+    .form-control, .form-select {
+      background: rgba(5,10,18,.35);
+      border: 1px solid rgba(255,255,255,.14);
+      color: #e9eefc;
+    }
+
+    .form-control::placeholder {
+      color: rgba(233,238,252,.55);
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: rgba(47,125,255,.6);
+      box-shadow: 0 0 0 .25rem rgba(47,125,255,.25);
+      background: rgba(5,10,18,.45);
+      color: #e9eefc;
+    }
+
+    .invalid-feedback {
+      color: #ffb0b0;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #2f7dff, #2fd1ff);
+      border: none;
+      font-weight: 700;
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.05);
+    }
+
+    .btn-outline-light {
+      border-color: rgba(255,255,255,.25);
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .feedback-card {
+      background: rgba(17,27,45,.62);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      transition: transform .12s ease, border-color .12s ease;
+      height: 100%;
+    }
+
+    .feedback-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(47,125,255,.35);
+    }
+
+    .rating-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: .2rem .55rem;
+      border-radius: 999px;
+      font-weight: 800;
+      letter-spacing: .02em;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(47,125,255,.18);
+      color: #dfe8ff;
+      font-size: .85rem;
+    }
+
+    .divider {
+      border-top: 1px solid rgba(255,255,255,.10);
+    }
+
+    .small-note {
+      font-size: .92rem;
+      color: rgba(233,238,252,.72);
+    }
+
+    .skeleton {
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: linear-gradient(90deg, rgba(255,255,255,.05) 25%, rgba(255,255,255,.11) 37%, rgba(255,255,255,.05) 63%);
+      background-size: 400% 100%;
+      animation: shimmer 1.25s ease-in-out infinite;
+      height: 120px;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 100% 0; }
+      100% { background-position: 0 0; }
+    }
+
+    footer {
+      color: rgba(233,238,252,.65);
+    }
+
+    a, a:hover {
+      color: inherit;
+    }
+
+    .alert {
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(17,27,45,.72);
+      color: #e9eefc;
+    }
+
+    .alert-success {
+      border-color: rgba(46, 204, 113, .35);
+      background: rgba(46, 204, 113, .12);
+    }
+
+    .alert-danger {
+      border-color: rgba(231, 76, 60, .38);
+      background: rgba(231, 76, 60, .12);
+    }
+
+    .alert-warning {
+      border-color: rgba(241, 196, 15, .35);
+      background: rgba(241, 196, 15, .12);
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-blur sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#">Client Feedback Portal</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#submit-feedback">Submit Feedback</a></li>
+          <li class="nav-item"><a class="nav-link" href="#all-feedback">View Feedback</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <img class="hero-image" src="images/hero.png" alt="AI-generated law firm banner" />
+    <div class="hero-overlay" aria-hidden="true"></div>
+    <div class="hero-content">
+      <div class="container py-5">
+        <div class="row">
+          <div class="col-lg-7">
+            <span class="hero-badge mb-3">
+              <span class="d-inline-block rounded-circle" style="width:10px;height:10px;background:var(--accent);box-shadow:0 0 0 6px rgba(47,125,255,.14);"></span>
+              Secure Feedback Collection
+            </span>
+            <h1 class="display-5 hero-title mb-3">Tell us how we did</h1>
+            <p class="lead hero-subtitle mb-4">
+              Share your experience and help us improve. Your feedback is sent securely to our service and displayed below for review.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+              <a class="btn btn-primary btn-lg px-4" href="#submit-feedback">Submit Feedback</a>
+              <a class="btn btn-outline-light btn-lg px-4" href="#all-feedback">Browse Responses</a>
+            </div>
+            <p class="small-note mt-3 mb-0">All fields are required. Network issues are handled with clear messages.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container my-5">
+    <div id="alertArea" class="mb-4" aria-live="polite" aria-atomic="true"></div>
+
+    <section id="submit-feedback" class="mb-5">
+      <div class="glass-card p-4 p-md-5">
+        <div class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-3">
+          <div>
+            <h2 class="section-title mb-1">Submit Feedback</h2>
+            <p class="muted mb-0">Provide your name, email, rating, and message.</p>
+          </div>
+          <div class="text-end">
+            <button id="refreshBtnTop" type="button" class="btn btn-outline-light btn-sm">
+              Refresh Feedback List
+            </button>
+          </div>
+        </div>
+        <hr class="divider my-4" />
+
+        <form id="feedbackForm" class="needs-validation" novalidate>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="name" class="form-label">Name</label>
+              <input id="name" name="name" type="text" class="form-control" placeholder="Your full name" required />
+              <div class="invalid-feedback">Please enter your name.</div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="email" class="form-label">Email</label>
+              <input id="email" name="email" type="email" class="form-control" placeholder="name@example.com" required />
+              <div class="invalid-feedback">Please enter a valid email address.</div>
+            </div>
+
+            <div class="col-md-4">
+              <label for="rating" class="form-label">Rating</label>
+              <select id="rating" name="rating" class="form-select" required>
+                <option value="" selected disabled>Choose…</option>
+                <option value="1">1 - Very dissatisfied</option>
+                <option value="2">2 - Dissatisfied</option>
+                <option value="3">3 - Neutral</option>
+                <option value="4">4 - Satisfied</option>
+                <option value="5">5 - Very satisfied</option>
+              </select>
+              <div class="invalid-feedback">Please select a rating from 1 to 5.</div>
+            </div>
+
+            <div class="col-md-8">
+              <label for="message" class="form-label">Feedback Message</label>
+              <textarea id="message" name="message" class="form-control" rows="4" placeholder="Write your feedback here..." required></textarea>
+              <div class="invalid-feedback">Please enter your feedback message.</div>
+            </div>
+
+            <div class="col-12 d-flex flex-wrap gap-2 align-items-center mt-3">
+              <button id="submitBtn" type="submit" class="btn btn-primary px-4">
+                Submit Feedback
+              </button>
+              <button id="resetBtn" type="button" class="btn btn-outline-light px-4">
+                Clear Form
+              </button>
+              <div id="submitStatus" class="muted small ms-auto" role="status" aria-live="polite"></div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section id="all-feedback">
+      <div class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-3">
+        <div>
+          <h2 class="section-title mb-1">All Feedback</h2>
+          <p class="muted mb-0">Responses fetched from the service.</p>
+        </div>
+        <div class="d-flex gap-2">
+          <button id="refreshBtn" type="button" class="btn btn-outline-light btn-sm">Refresh</button>
+        </div>
+      </div>
+
+      <div id="feedbackMeta" class="small-note mb-3"></div>
+
+      <div id="feedbackList" class="row g-3">
+        <div class="col-md-6 col-lg-4"><div class="skeleton"></div></div>
+        <div class="col-md-6 col-lg-4"><div class="skeleton"></div></div>
+        <div class="col-md-6 col-lg-4"><div class="skeleton"></div></div>
+      </div>
+    </section>
+
+    <footer class="mt-5 pt-4 border-top border-light border-opacity-10">
+      <div class="d-flex flex-wrap justify-content-between gap-2">
+        <div>© <span id="year"></span> Feedback Collection System</div>
+        <div class="muted">API: <span class="font-monospace">http://127.0.0.1:5005/feedback</span></div>
+      </div>
+    </footer>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+  <script>
+    (function () {
+      "use strict";
+
+      const API_URL = "http://127.0.0.1:5005/feedback";
+
+      const alertArea = document.getElementById("alertArea");
+      const form = document.getElementById("feedbackForm");
+      const submitBtn = document.getElementById("submitBtn");
+      const resetBtn = document.getElementById("resetBtn");
+      const submitStatus = document.getElementById("submitStatus");
+
+      const feedbackList = document.getElementById("feedbackList");
+      const feedbackMeta = document.getElementById("feedbackMeta");
+      const refreshBtn = document.getElementById("refreshBtn");
+      const refreshBtnTop = document.getElementById("refreshBtnTop");
+
+      document.getElementById("year").textContent = new Date().getFullYear();
+
+      function escapeHtml(str) {
+        return String(str)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function showAlert(type, message, opts = {}) {
+        const dismissible = opts.dismissible !== false;
+        const id = "a_" + Math.random().toString(16).slice(2);
+
+        const wrapper = document.createElement("div");
+        wrapper.innerHTML = `
+          <div id="${id}" class="alert alert-${type} ${dismissible ? "alert-dismissible" : ""} fade show" role="alert">
+            <div class="d-flex align-items-start gap-2">
+              <div class="flex-grow-1">${escapeHtml(message)}</div>
+            </div>
+            ${dismissible ? `<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>` : ""}
+          </div>
+        `;
+        alertArea.prepend(wrapper.firstElementChild);
+
+        if (opts.autoHideMs) {
+          setTimeout(() => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            const alert = bootstrap.Alert.getOrCreateInstance(el);
+            alert.close();
+          }, opts.autoHideMs);
+        }
+      }
+
+      function setSubmitting(isSubmitting, text) {
+        submitBtn.disabled = isSubmitting;
+        resetBtn.disabled = isSubmitting;
+        submitStatus.textContent = text || "";
+      }
+
+      function normalizeFeedbackItem(item) {
+        // Be tolerant of different server shapes
+        const name = item?.name ?? item?.user_name ?? item?.username ?? "Anonymous";
+        const email = item?.email ?? item?.email_address ?? "";
+        const message = item?.message ?? item?.feedback ?? item?.feedback_message ?? "";
+        const ratingRaw = item?.rating ?? item?.score ?? "";
+        const rating = Number(ratingRaw);
+        const createdAt = item?.created_at ?? item?.createdAt ?? item?.timestamp ?? "";
+        return { name, email, message, rating: Number.isFinite(rating) ? rating : null, createdAt, raw: item };
+      }
+
+      function renderFeedback(items) {
+        if (!Array.isArray(items) || items.length === 0) {
+          feedbackList.innerHTML = `
+            <div class="col-12">
+              <div class="glass-card p-4">
+                <h3 class="h5 mb-2">No feedback yet</h3>
+                <p class="muted mb-0">Be the first to share your experience.</p>
+              </div>
+            </div>
+          `;
+          feedbackMeta.textContent = "Showing 0 entries.";
+          return;
+        }
+
+        const normalized = items.map(normalizeFeedbackItem);
+
+        feedbackMeta.textContent = `Showing ${normalized.length} entr${normalized.length === 1 ? "y" : "ies"}.`;
+
+        feedbackList.innerHTML = normalized.map((f) => {
+          const name = escapeHtml(f.name);
+          const msg = escapeHtml(f.message || "");
+          const ratingText = (f.rating && f.rating >= 1 && f.rating <= 5) ? `${f.rating}/5` : "N/A";
+          const created = f.createdAt ? escapeHtml(String(f.createdAt)) : "";
+          const email = f.email ? escapeHtml(String(f.email)) : "";
+
+          return `
+            <div class="col-md-6 col-lg-4">
+              <div class="feedback-card p-4 h-100">
+                <div class="d-flex align-items-start justify-content-between gap-3 mb-2">
+                  <div>
+                    <div class="fw-bold">${name}</div>
+                    <div class="muted small">
+                      ${email ? `<span class="me-2">${email}</span>` : ""}
+                      ${created ? `<span class="opacity-75">${created}</span>` : ""}
+                    </div>
+                  </div>
+                  <div class="rating-pill" title="Rating">${escapeHtml(ratingText)}</div>
+                </div>
+                <div class="mt-3">
+                  <div class="muted small mb-1">Message</div>
+                  <div style="white-space: pre-wrap; word-break: break-word;">${msg || "<span class='muted'>No message provided.</span>"}</div>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join("");
+      }
+
+      function parseFeedbackResponse(data) {
+        // Accept: array, {feedback: []}, {data: []}, {items: []}
+        if (Array.isArray(data)) return data;
+        if (data && Array.isArray(data.feedback)) return data.feedback;
+        if (data && Array.isArray(data.data)) return data.data;
+        if (data && Array.isArray(data.items)) return data.items;
+        return [];
+      }
+
+      async function fetchWithTimeout(url, options = {}, timeoutMs = 10000) {
+        const controller = new AbortController();
+        const id = setTimeout(() => controller.abort(), timeoutMs);
+        try {
+          const res = await fetch(url, { ...options, signal: controller.signal });
+          return res;
+        } finally {
+          clearTimeout(id);
+        }
+      }
+
+      function friendlyNetworkError(err) {
+        if (err?.name === "AbortError") return "Request timed out. Please try again.";
+        return "Network error. Please check your connection and ensure the service is running.";
+      }
+
+      async function loadFeedback() {
+        feedbackMeta.textContent = "Loading feedback...";
+        feedbackList.innerHTML = `
+          <div class="col-md-6 col-lg-4"><div class="skeleton"></div></div>
+          <div class="col-md-6 col-lg-4"><div class="skeleton"></div></div>
+          <div class="col-md-6 col-lg-4"><div class="skeleton"></div></div>
+        `;
+
+        try {
+          const res = await fetchWithTimeout(API_URL, {
+            method: "GET",
+            headers: { "Accept": "application/json" }
+          }, 10000);
+
+          if (!res.ok) {
+            const text = await res.text().catch(() => "");
+            throw new Error(`Server returned ${res.status}. ${text ? "Details: " + text : ""}`.trim());
+          }
+
+          const data = await res.json();
+          const items = parseFeedbackResponse(data);
+          renderFeedback(items);
+        } catch (err) {
+          renderFeedback([]);
+          showAlert("warning", `${friendlyNetworkError(err)} Unable to load feedback right now.`, { autoHideMs: 8000 });
+          feedbackMeta.textContent = "Unable to load feedback.";
+        }
+      }
+
+      function getFormData() {
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const message = document.getElementById("message").value.trim();
+        const ratingValue = document.getElementById("rating").value;
+
+        return {
+          name,
+          email,
+          message,
+          rating: ratingValue ? Number(ratingValue) : null
+        };
+      }
+
+      function validateForm() {
+        // Use native constraint validation + bootstrap styling
+        const ok = form.checkValidity();
+        form.classList.add("was-validated");
+        return ok;
+      }
+
+      async function submitFeedback(payload) {
+        const res = await fetchWithTimeout(API_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify(payload)
+        }, 12000);
+
+        if (!res.ok) {
+          const contentType = res.headers.get("content-type") || "";
+          let details = "";
+          try {
+            if (contentType.includes("application/json")) {
+              const j = await res.json();
+              details = j?.message || j?.error || JSON.stringify(j);
+            } else {
+              details = await res.text();
+            }
+          } catch (_) { /* ignore */ }
+
+          const msg = details ? `Submission failed (${res.status}). ${String(details).slice(0, 500)}` : `Submission failed (${res.status}).`;
+          throw new Error(msg);
+        }
+
+        // Attempt to parse JSON, but don't fail if empty
+        try { return await res.json(); } catch (_) { return null; }
+      }
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        alertArea.innerHTML = "";
+
+        if (!validateForm()) {
+          showAlert("danger", "Please complete all required fields before submitting.", { autoHideMs: 6000 });
+          return;
+        }
+
+        const payload = getFormData();
+
+        setSubmitting(true, "Submitting...");
+        try {
+          await submitFeedback(payload);
+          showAlert("success", "Thank you! Your feedback was submitted successfully.", { autoHideMs: 6000 });
+
+          form.reset();
+          form.classList.remove("was-validated");
+
+          await loadFeedback();
+        } catch (err) {
+          const msg = (err && err.message) ? err.message : friendlyNetworkError(err);
+          const friendly = msg.includes("Network error") || msg.includes("timed out")
+            ? msg
+            : "We couldn't submit your feedback right now. Please try again.";
+
+          showAlert("danger", friendly, { autoHideMs: 9000 });
+        } finally {
+          setSubmitting(false, "");
+        }
+      });
+
+      resetBtn.addEventListener("click", () => {
+        form.reset();
+        form.classList.remove("was-validated");
+        submitStatus.textContent = "";
+      });
+
+      refreshBtn.addEventListener("click", loadFeedback);
+      refreshBtnTop.addEventListener("click", loadFeedback);
+
+      // Initial load
+      loadFeedback();
+    })();
+  </script>
+</body>
+</html>
