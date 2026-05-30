@@ -1,32 +1,39 @@
-# DTS114TC Coursework — Law Firm Website
+# DTS114TC Coursework — AI-Powered Meta-Software Development
 
 **2470669 · Weichu Zeng**
 
-Deployment repository for an AI-generated law firm website and Flask API, including version control, automated testing, and CI/CD.
+This repository supports the **Software Component** coursework: an AI-driven system that automatically generates SDLC artefacts and application code from a business problem, with version control, testing, and CI/CD for the generated output.
 
-## Scope
+## Core deliverable: meta-software system
 
-This project implements the **Software Component (deployment)** of the coursework: a promotional site for a law firm (team profiles, client inquiries, AI-generated hero image) backed by a REST API. The meta-software pipeline that generates the application is submitted separately as a Jupyter Notebook.
+The primary artefact is **`Task1/meta_dev.ipynb`** — a Jupyter Notebook that implements the AI-DLC pipeline:
 
-## Contents
+1. **Inception** — problem statement, personas, PRD, user stories  
+2. **Construction** — UML diagrams, Flask REST API, HTML website (with AI-generated hero image)  
+3. **Operations** — Docker packaging of the generated application  
 
-| Path | Role |
-|------|------|
-| `flask/` | Application source (`main.py`, `index.html`, `images/hero.png`) |
-| `tests/` | Unit tests (pytest) |
+Supporting module: `Task1/utils.py` (LLM client, PlantUML rendering, image generation).
+
+**Business scenario:** law firm website (aligned with the presentation component).
+
+The Flask site under `Task2/flask/` is an **example output** of the notebook, not the coursework subject itself.
+
+## Repository layout
+
+| Path | Purpose |
+|------|---------|
+| `Task1/meta_dev.ipynb` | Meta-software development pipeline (main submission) |
+| `Task1/utils.py` | LLM and tooling helpers |
+| `Task1/environment.yml` | Conda environment |
+| `Task2/flask/` | Generated law firm application (sample output) |
+| `Task2/tests/` | Pytest suite for the generated API |
+| `Task2/screenshots/` | Evidence: commits, deployment, CI/CD |
 | `.github/workflows/` | GitHub Actions pipeline |
-| `docker/` | Container configuration |
-| `screenshots/` | Evidence: commits, deployment, CI/CD workflow |
 
-## Technical Summary
+## Engineering practices (generated application)
 
-- **Stack:** Python 3.11, Flask, flask-cors  
-- **Port:** 5005  
+- **Stack:** Python 3.11, Flask  
 - **Methodology:** AI-DLC with human oversight  
 - **Pipeline:** build → test → Docker image verification on push to `main`
 
-## API (summary)
-
-`GET /health` · `GET /practice-areas` · `GET /attorneys` · `POST /feedback` · `GET /feedback/<id>`
-
-Entry point: `flask/main.py`
+Requires a local `.env` with `APIFREE_API_KEY` when running the notebook (not committed to this repository).

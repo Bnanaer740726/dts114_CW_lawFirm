@@ -1,5 +1,6 @@
 .env
 .env.*
+Task1/.env
 __pycache__/
 *.pyc
 .venv/
