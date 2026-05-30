@@ -1,11 +1,11 @@
-# Flask Feedback API + HTML Frontend
+# Law Firm Website — Flask Application
 
-An integrated Flask app that provides a simple Feedback API and an interactive HTML frontend for submitting and viewing feedback. The frontend is served automatically by Flask¡ªno separate static server or build step required.
+Flask REST API and HTML frontend for a law firm promotional site. The frontend includes an AI-generated hero banner and a feedback/inquiry form. Static assets are served by Flask on port 5005.
 
 ## Setup
 
 ```bash
-pip install flask flask-cors
+pip install -r requirements.txt
 ```
 
 ## Run
@@ -14,26 +14,32 @@ pip install flask flask-cors
 python main.py
 ```
 
-## Access
+Open http://127.0.0.1:5005
 
-Open the app in your browser:
+## API Examples
 
-- http://127.0.0.1:5005
+### Health check
 
-The interactive HTML UI loads from the same server and can be used to submit feedback and view stored entries.
+```bash
+curl http://127.0.0.1:5005/health
+```
 
-## API Usage (cURL)
-
-### POST `/feedback` (submit feedback)
+### Submit client inquiry
 
 ```bash
 curl -X POST http://127.0.0.1:5005/feedback \
   -H "Content-Type: application/json" \
-  -d '{"name":"Alex","message":"Great app!","rating":5}'
+  -d '{"name":"Jane Doe","email":"jane@example.com","message":"I need contract review.","type":"inquiry"}'
 ```
 
-### GET `/feedback` (list feedback)
+### List practice areas
 
 ```bash
-curl http://127.0.0.1:5005/feedback
+curl http://127.0.0.1:5005/practice-areas
+```
+
+### List attorneys
+
+```bash
+curl http://127.0.0.1:5005/attorneys
 ```

@@ -1,72 +1,32 @@
-# Task 2 — Version Control, CI/CD, and Deployment
+# DTS114TC Coursework — Task 2
 
-## Prerequisites
+**2470669 · Weichu Zeng**
 
-1. Run `Outputs/Task1/meta_dev.ipynb` to generate the Flask app under `artifacts/app/flask/`.
-2. Copy generated files into this folder:
+Law firm website and Flask API, generated via the Task 1 meta-software pipeline and deployed under version control with CI/CD.
 
-```powershell
-Copy-Item -Recurse -Force Outputs\Task1\artifacts\app\flask Task2\flask
-```
+## Scope
 
-## Local run
+Task 2 covers deployment and engineering practices for the application produced in Task 1: a promotional site for a law firm (team profiles, client inquiries, AI-generated hero image) backed by a REST API.
 
-```powershell
-cd flask
-pip install -r requirements.txt
-python main.py
-```
+## Contents
 
-Open http://127.0.0.1:5005 — the page should show the AI-generated hero image.
+| Path | Role |
+|------|------|
+| `flask/` | Application source (`main.py`, `index.html`, `images/hero.png`) |
+| `tests/` | Unit tests (pytest) |
+| `.github/workflows/` | GitHub Actions pipeline |
+| `docker/` | Container configuration |
+| `screenshots/` | Coursework evidence (commits, deployment, CI/CD) |
 
-## Docker
+## Technical Summary
 
-From `Task2/`:
+- **Stack:** Python 3.11, Flask, flask-cors  
+- **Port:** 5005  
+- **Methodology:** AI-DLC with human oversight  
+- **Pipeline:** build → test → Docker image verification on push to `main`
 
-```powershell
-docker-compose up --build
-```
+## API (summary)
 
-## Git & GitHub
+`GET /health` · `GET /practice-areas` · `GET /attorneys` · `POST /feedback` · `GET /feedback/<id>`
 
-```powershell
-git init
-git add .
-git commit -m "feat: law firm meta-software with CI/CD"
-git branch -M main
-git remote add origin https://github.com/Bnanaer740726/dts114_CW_lawFirm.git
-git push -u origin main
-```
-
-**Screenshot 1:** GitHub commit history or `git log --oneline`.
-
-## CI/CD (GitHub Actions)
-
-Workflow file: `.github/workflows/ci-cd.yml`
-
-- **Build:** install Python dependencies
-- **Test:** run `pytest` against `/health` and `/feedback`
-- **Docker build:** verify the container image builds on `main`
-
-**Screenshot 3:** GitHub Actions tab showing a green workflow run.
-
-## Deployment (Render — recommended)
-
-1. Create a free account at https://render.com
-2. New → Web Service → connect your GitHub repo
-3. Settings:
-   - **Root Directory:** `Task2` (or repo root if Task2 is the repo)
-   - **Build Command:** `pip install -r flask/requirements.txt`
-   - **Start Command:** `cd flask && python main.py`
-   - **Port:** 5005
-4. Deploy and open the public URL.
-
-**Screenshot 2:** Browser showing the deployed law firm website with the hero image.
-
-## Screenshots folder
-
-Save the three required screenshots under `screenshots/`:
-
-- `commits.png`
-- `deployment.png`
-- `cicd_workflow.png`
+Entry point: `flask/main.py`
