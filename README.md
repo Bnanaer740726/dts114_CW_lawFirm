@@ -1,12 +1,12 @@
-# DTS114TC Coursework — Task 2
+# DTS114TC Coursework — Law Firm Website
 
 **2470669 · Weichu Zeng**
 
-Law firm website and Flask API, generated via the Task 1 meta-software pipeline and deployed under version control with CI/CD.
+Deployment repository for an AI-generated law firm website and Flask API, including version control, automated testing, and CI/CD.
 
 ## Scope
 
-Task 2 covers deployment and engineering practices for the application produced in Task 1: a promotional site for a law firm (team profiles, client inquiries, AI-generated hero image) backed by a REST API.
+This project implements the **Software Component (deployment)** of the coursework: a promotional site for a law firm (team profiles, client inquiries, AI-generated hero image) backed by a REST API. The meta-software pipeline that generates the application is submitted separately as a Jupyter Notebook.
 
 ## Contents
 
@@ -16,7 +16,7 @@ Task 2 covers deployment and engineering practices for the application produced 
 | `tests/` | Unit tests (pytest) |
 | `.github/workflows/` | GitHub Actions pipeline |
 | `docker/` | Container configuration |
-| `screenshots/` | Coursework evidence (commits, deployment, CI/CD) |
+| `screenshots/` | Evidence: commits, deployment, CI/CD workflow |
 
 ## Technical Summary
 
