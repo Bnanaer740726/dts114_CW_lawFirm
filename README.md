@@ -2,7 +2,7 @@
 
 **2470669 · Weichu Zeng**
 
-An AI-driven system that automatically generates SDLC artefacts and application code from a business problem, with version control, testing, and CI/CD for the generated output.
+An AI-driven system that automatically generates artefacts and application code from a business problem, with version control, testing, and CI/CD for the generated output.
 
 ## Core deliverable
 
