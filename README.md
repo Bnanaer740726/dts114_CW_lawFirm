@@ -16,7 +16,7 @@ Supporting module: `meta-system/utils.py` (LLM client, PlantUML rendering, image
 
 **Business scenario:** law firm website (aligned with the presentation component).
 
-The Flask site under `deployment/flask/` is **example output** from the notebook, not the subject of the coursework.
+The Flask site under `deployment/flask/` is **example output** from the notebook.
 
 ## Repository layout
 
